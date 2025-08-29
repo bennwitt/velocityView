@@ -96,7 +96,7 @@ velocityView/
 ---
 
 ## 🚀 Getting Started
-
+````
 bash
 # Set up environment
 pyenv virtualenv 3.11.11 velocityView
@@ -112,7 +112,7 @@ python velocity_infer.py
 python speed_estimator.py
 python violation_filter.py
 python video_overlay.py
-
+````
 ---
 
 ## 🧭 Next-Level Roadmap: Where VelocityView Goes from Here
