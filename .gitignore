@@ -6,7 +6,6 @@ __pycache__/
 # C and various extensions
 *.so
 *.pt
-*.onnx
 *.mp4
 # Distribution / packaging
 .Python
