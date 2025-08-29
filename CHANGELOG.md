@@ -1,5 +1,29 @@
 
 ## 2025-08-29
+# Changes in `detections_log.csv`
+
+- **Added Class Name**: The CSV header now includes a `class_name` column, which provides more context by associating each detection with its respective category.
+  ```diff
+  -frame,class_id,confidence,x,y,w,h
+  +frame,class_id,class_name,confidence,x,y,w,h
+  ```
+- **Improved Logging Format**: Each logged entry now records the class name alongside other attributes:
+  ```python
+  log_file.write(f"{frame_idx},{class_id},{cls_name},{conf:.2f},{x},{y},{w},{h}\n")
+  ```
+
+# Adjustments in `velocity_inference.py`
+
+- **Version Update**: Incremented application version from `0.1.4` to `0.2.9`, reflecting significant improvements.
+- **Confidence Threshold Change**: Increased from `0.25` to `0.54`, enhancing object detection reliability by filtering out less certain predictions:
+  ```diff
+  -CONFIDENCE_THRESHOLD = 0.25
+  +CONFIDENCE_THRESHOLD = 0.54
+  ```
+- **CSV Header Modification**: Updated logic for writing headers if needed:
+    ```python log_file.write("frame,class_id,class_name,confidence,x,y,w,h\u00a0\u00a09``)```		-	# Log every detection immediately (include class label) # Log every detection immediately (include class label)+                log_file.flush()# Impact of ChangesThese modifications ensure that each entry in our logs is not only accurate but also enriched with categorical labels that can assist further analysis or debugging processes._Adjusting_ the confidence level helps maintain high-quality detections by minimizing false positives.
+
+## 2025-08-29
 # Update Details
 
 ## Detections Log Enhancements
