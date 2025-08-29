@@ -1,22 +1,18 @@
-# Last modified: 2025-08-29 16:56:23
-appVersion = "0.2.11"
+# Last modified: 2025-08-29 16:39:59
+appVersion = "0.2.10"
 # velocity_infer.py - Phase 1
 import cv2
 import numpy as np
 import time
-from datetime import datetime
 import os
 
 # Config
 MODEL_PATH = "/ai/bennwittRepos/velocityView/models/yolo11n.onnx"
 VIDEO_INPUT = 0  # Use 0 for webcam, or path to video
-OUTPUT_VIDEO_PATH = "/ai/bennwittRepos/velocityView/output/detections_annotated.mp4"  # legacy single-file path (unused for rolling clips)
+OUTPUT_VIDEO_PATH = "/ai/bennwittRepos/velocityView/output/detections_annotated.mp4"
 FPS_FALLBACK = 24.0
 CONFIDENCE_THRESHOLD = 0.54
 NMS_THRESHOLD = 0.4
-TAIL_FRAMES_AFTER_DETECTION = (
-    300  # keep recording this many frames after last detection
-)
 
 # COCO class names
 
@@ -130,11 +126,8 @@ log_file = open(log_path, "a", buffering=1)
 if need_header:
     log_file.write("frame,class_id,class_name,confidence,x,y,w,h\n")
 
-# Rolling MP4 writer: start on detection, stop after tail frames
+# Prepare MP4 writer after first frame (to know frame size)
 writer = None
-writer_path = None
-frames_tail_left = 0
-recording_class = None
 input_fps = cap.get(cv2.CAP_PROP_FPS)
 if not input_fps or input_fps <= 1.0:
     input_fps = FPS_FALLBACK
@@ -161,7 +154,13 @@ try:
         if outputs.ndim == 3 and outputs.shape[1] in (84, 85):
             outputs = np.transpose(outputs, (0, 2, 1))
 
-        # Do not initialize writer here; we start recording only upon detections
+        # Initialize writer lazily with discovered frame size
+        if writer is None:
+            fh, fw = frame.shape[:2]
+            fourcc = cv2.VideoWriter_fourcc(*"mp4v")
+            writer = cv2.VideoWriter(OUTPUT_VIDEO_PATH, fourcc, input_fps, (fw, fh))
+            if not writer.isOpened():
+                raise RuntimeError("Failed to open MP4 writer for output video")
 
         rows = outputs.shape[1]
         dims = outputs.shape[2]
@@ -218,20 +217,12 @@ try:
         )
 
         # Process detections
-        detected_this_frame = False
-        chosen_class_id = None
-        chosen_conf = -1.0
         if len(indices) > 0:
             for idx in indices:
                 i = idx[0] if isinstance(idx, (list, tuple, np.ndarray)) else idx
                 x, y, w, h = boxes[i]
                 class_id = class_ids[i]
                 conf = confidences[i]
-                detected_this_frame = True
-                # Choose the highest-confidence detection in this frame for naming
-                if conf > chosen_conf:
-                    chosen_conf = conf
-                    chosen_class_id = class_id
 
                 # Draw detections
                 color = (0, 255, 255) if class_id == 0 else (0, 255, 0)
@@ -256,79 +247,14 @@ try:
                 )
                 log_file.flush()
 
-        # Handle rolling recording logic: start/continue/stop writer
-        if detected_this_frame:
-            # Reset tail window while detections continue
-            frames_tail_left = TAIL_FRAMES_AFTER_DETECTION
-
-            # Start a new writer if not currently recording
-            if writer is None:
-                fh, fw = frame.shape[:2]
-                fourcc = cv2.VideoWriter_fourcc(*"mp4v")
-
-                # Build filename: classnameYYYYMMDDHHMM.mp4
-                if chosen_class_id is not None and 0 <= chosen_class_id < len(
-                    COCO_NAMES
-                ):
-                    recording_class = COCO_NAMES[chosen_class_id]
-                else:
-                    recording_class = "unknown"
-                safe_class = recording_class.replace(" ", "_")
-                timestamp = datetime.now().strftime("%Y%m%d%H%M")
-                base_name = f"{safe_class}{timestamp}.mp4"
-                out_dir = "/ai/bennwittRepos/velocityView/output"
-                os.makedirs(out_dir, exist_ok=True)
-                path = os.path.join(out_dir, base_name)
-
-                # Avoid accidental overwrite if multiple sessions in same minute
-                if os.path.exists(path):
-                    suffix = 1
-                    while True:
-                        alt = os.path.join(
-                            out_dir, f"{safe_class}{timestamp}_{suffix}.mp4"
-                        )
-                        if not os.path.exists(alt):
-                            path = alt
-                            break
-                        suffix += 1
-
-                writer = cv2.VideoWriter(path, fourcc, input_fps, (fw, fh))
-                if not writer.isOpened():
-                    writer = None
-                    print(f"⚠️ Failed to open MP4 writer at {path}")
-                else:
-                    writer_path = path
-                    print(
-                        f"🎬 Started recording: {writer_path} (class={recording_class})"
-                    )
-        else:
-            # No detections this frame: count down tail and stop if elapsed
-            if writer is not None:
-                frames_tail_left -= 1
-                if frames_tail_left <= 0:
-                    writer.release()
-                    print(f"✅ Saved clip: {writer_path}")
-                    writer = None
-                    writer_path = None
-                    recording_class = None
-
-        # Write annotated frame only when recording is active
+        # Write annotated frame
         if writer is not None:
             writer.write(frame)
 
         frame_idx += 1
 
 except KeyboardInterrupt:
-    print("🛑 Interrupted by user. Finalizing current recording (if any)...")
-    # If interrupted during an active recording, close and report the file path
-    if writer is not None:
-        try:
-            writer.release()
-        finally:
-            print(f"✅ Saved clip: {writer_path}")
-            writer = None
-            writer_path = None
-            recording_class = None
+    print("🛑 Interrupted by user.")
 
 finally:
     cap.release()
@@ -336,5 +262,4 @@ finally:
         writer.release()
     log_file.close()
     print("✅ Detection log saved to output/detections_log.csv")
-    # The annotated MP4s are saved per detection session in output/ with naming pattern
-    # classnameYYYYMMDDHHMM.mp4 (with an optional _N suffix if needed).
+    print(f"🎞️ Annotated MP4 saved to {OUTPUT_VIDEO_PATH}")

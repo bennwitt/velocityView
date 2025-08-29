@@ -1,5 +1,24 @@
 
 ## 2025-08-29
+# Enhancements in Video Detection
+
+The recent changes bring significant improvements to the way detections are logged and videos are recorded.
+
+## Key Changes:
+- **Rolling Recording Logic**: Now, video recordings start only upon detecting specified classes, continuing until a specified number of frames after the last detection.
+- **Dynamic File Naming**: Recorded clips are named using a pattern that includes the class name and timestamp, ensuring unique filenames even within consecutive sessions.
+- **Removed Static Logging File**: The previously used `detections_log.csv` has been removed in favor of more dynamic handling directly within `velocity_inference.py`.
+
+## Detailed Breakdown:
+### Code Structure Adjustments:
+1. **Initialization Improvements**
+   - Removed premature MP4 writer initialization; it now starts with detections only.
+   - Added variables like `writer_path`, `frames_tail_left`, and `recording_class` for managing state across frames.
+2. **Detection Processing Loop**
+   - Each frame checks for new detections; if found, resets tail counter and potentially initiates a new recording session with an appropriately generated filename using class names (`COCO_NAMES`) converted into safe string formats (e.g., replacing spaces).
+3. **File Management & Safety Checks:**		  		  		  		  		  	     - Ensures no overwriting by checking existing files before starting a new one — appending numeric suffixes if necessary (`_N`).	     - Handles interruptions gracefully by finalizing active recordings properly when user interrupts via Ctrl+C or similar methods.
+
+## 2025-08-29
 # Video Overlay Enhancements
 
 This commit introduces several significant improvements to the `video_overlay.py` script:
