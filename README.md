@@ -76,7 +76,7 @@ We’re putting the tools of enforcement and awareness in the hands of the peopl
 ---
 
 ## 📁 Repository Structure
-```
+
 velocityView/
 ├── models/
 │   └── yolov11n.onnx               # ONNX model for OpenCV DNN
