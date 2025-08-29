@@ -1,5 +1,5 @@
-# Last modified: 2025-08-29 17:33:18
-appVersion = "0.3.16"
+# Last modified: 2025-08-29 17:16:14
+appVersion = "0.3.15"
 # velocity_infer.py - Phase 1
 import cv2
 import numpy as np
@@ -131,27 +131,12 @@ log_file = open(log_path, "a", buffering=1)
 if need_header:
     log_file.write("frame,class_id,class_name,confidence,x,y,w,h\n")
 
-# Per-clip summary log: class label, mp4 name, start, end, total frames, fps
-clips_log_path = "/ai/bennwittRepos/velocityView/output/clips_log.csv"
-need_clips_header = (not os.path.exists(clips_log_path)) or (
-    os.path.getsize(clips_log_path) == 0
-)
-clips_log_file = open(clips_log_path, "a", buffering=1)
-if need_clips_header:
-    clips_log_file.write(
-        "class_name,filename,start_time,end_time,total_frames,fps_reported,duration_seconds,fps_measured,frames_captured,frames_saved\n"
-    )
-
 # Rolling MP4 writer: start on detection, stop after tail frames
 writer = None
 writer_path = None
 # While recording, we count down frames and stop exactly at zero.
 frames_left_to_record = 0
 recording_class = None
-current_clip_start_time = None
-frames_written_current_clip = 0
-frames_captured_current_clip = 0
-frames_saved_current_clip = 0
 input_fps = cap.get(cv2.CAP_PROP_FPS)
 if not input_fps or input_fps <= 1.0:
     input_fps = FPS_FALLBACK
@@ -308,53 +293,18 @@ try:
             else:
                 writer_path = path
                 frames_left_to_record = TAIL_FRAMES_AFTER_DETECTION
-                current_clip_start_time = datetime.now()
-                frames_written_current_clip = 0
-                frames_captured_current_clip = 0
-                frames_saved_current_clip = 0
                 print(f"🎬 Started recording: {writer_path} (class={recording_class})")
 
         # If recording, write frame and count down until reaching the limit
         if writer is not None:
-            # Count frame captured during active clip
-            frames_captured_current_clip += 1
-            # Save annotated frame
             writer.write(frame)
-            frames_written_current_clip += 1
-            frames_saved_current_clip += 1
             frames_left_to_record -= 1
             if frames_left_to_record <= 0:
-                # Close and log the clip summary
-                try:
-                    writer.release()
-                finally:
-                    end_time = datetime.now()
-                    duration_seconds = max(
-                        (
-                            end_time - (current_clip_start_time or end_time)
-                        ).total_seconds(),
-                        1e-06,
-                    )
-                    fps_measured = frames_saved_current_clip / duration_seconds
-                    start_str = (
-                        current_clip_start_time.isoformat(sep=" ")
-                        if current_clip_start_time
-                        else ""
-                    )
-                    end_str = end_time.isoformat(sep=" ")
-                    filename_only = os.path.basename(writer_path) if writer_path else ""
-                    clips_log_file.write(
-                        f"{recording_class},{filename_only},{start_str},{end_str},{frames_written_current_clip},{input_fps:.3f},{duration_seconds:.6f},{fps_measured:.6f},{frames_captured_current_clip},{frames_saved_current_clip}\n"
-                    )
-                    clips_log_file.flush()
-                    print(f"✅ Saved clip: {writer_path}")
-                    writer = None
-                    writer_path = None
-                    recording_class = None
-                    current_clip_start_time = None
-                    frames_written_current_clip = 0
-                    frames_captured_current_clip = 0
-                    frames_saved_current_clip = 0
+                writer.release()
+                print(f"✅ Saved clip: {writer_path}")
+                writer = None
+                writer_path = None
+                recording_class = None
 
         frame_idx += 1
 
@@ -365,59 +315,16 @@ except KeyboardInterrupt:
         try:
             writer.release()
         finally:
-            # Log clip summary on interrupt
-            end_time = datetime.now()
-            duration_seconds = max(
-                (end_time - (current_clip_start_time or end_time)).total_seconds(),
-                1e-06,
-            )
-            fps_measured = frames_saved_current_clip / duration_seconds
-            start_str = (
-                current_clip_start_time.isoformat(sep=" ")
-                if current_clip_start_time
-                else ""
-            )
-            end_str = end_time.isoformat(sep=" ")
-            filename_only = os.path.basename(writer_path) if writer_path else ""
-            clips_log_file.write(
-                f"{recording_class},{filename_only},{start_str},{end_str},{frames_written_current_clip},{input_fps:.3f},{duration_seconds:.6f},{fps_measured:.6f},{frames_captured_current_clip},{frames_saved_current_clip}\n"
-            )
-            clips_log_file.flush()
             print(f"✅ Saved clip: {writer_path}")
             writer = None
             writer_path = None
             recording_class = None
-            current_clip_start_time = None
-            frames_written_current_clip = 0
-            frames_captured_current_clip = 0
-            frames_saved_current_clip = 0
 
 finally:
     cap.release()
     if writer is not None:
-        try:
-            writer.release()
-        finally:
-            # Log summary if a recording was still active
-            end_time = datetime.now()
-            duration_seconds = max(
-                (end_time - (current_clip_start_time or end_time)).total_seconds(),
-                1e-06,
-            )
-            fps_measured = frames_saved_current_clip / duration_seconds
-            start_str = (
-                current_clip_start_time.isoformat(sep=" ")
-                if current_clip_start_time
-                else ""
-            )
-            end_str = end_time.isoformat(sep=" ")
-            filename_only = os.path.basename(writer_path) if writer_path else ""
-            clips_log_file.write(
-                f"{recording_class},{filename_only},{start_str},{end_str},{frames_written_current_clip},{input_fps:.3f},{duration_seconds:.6f},{fps_measured:.6f},{frames_captured_current_clip},{frames_saved_current_clip}\n"
-            )
-            clips_log_file.flush()
+        writer.release()
     log_file.close()
-    clips_log_file.close()
     print("✅ Detection log saved to output/detections_log.csv")
     # The annotated MP4s are saved per detection session in output/ with naming pattern
     # classnameYYYYMMDDHHMM.mp4 (with an optional _N suffix if needed).
