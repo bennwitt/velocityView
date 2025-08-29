@@ -1,5 +1,29 @@
 
 ## 2025-08-29
+# Video Overlay Enhancements
+
+This commit introduces several significant improvements to the `video_overlay.py` script:
+
+## Changes Made
+- **Version Update**: Incremented `appVersion` from 0.0.6 to 0.1.11.
+- **File Format Change**: 
+  - Changed input (`recorded_video`) and output (`velocity_overlay`) files from `.avi` to `.mp4`, reflecting modern usage trends.
+- **Dynamic FPS & Resolution Handling**:
+  - Introduced automatic detection of frame width, height, and frames per second (FPS) using OpenCV properties:
+    ```python
+    in_w = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+    in_h = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+    in_fps = cap.get(cv2.CAP_PROP_FPS)
+    fps = in_fps if in_fps and in_fps > 1.0 else FPS_FALLBACK
+    out_size = RESOLUTION if RESOLUTION else (in_w, in_h)
+   ```
+   - This ensures that the script adapts to various input videos without manual configuration unless explicitly overridden.
+- **Codec Update**: Switched from 'XVID' codec used by AVI format to 'mp4v', suitable for MP4 files:
+   ```python
+   fourcc = cv2.VideoWriter_fourcc(*"mp4v")
+out = cv2.VideoWriter(OUTPUT_PATH, fourcc, fps, out_size)	```						     	     	     	         	       n e t o u r e s i l i o n a c h i v e d w h e n c a p t u r i n g f r a m es . T h is s“️ Failed to open MP writer your OpenC may lack support” ) ````      # Resize if desired output size differs+if (frame.shape[1], frame.shape[0]) != out_size:+frame=cv.resize(frame,out_size)out.write(frame)+frame_idx+=1
+
+## 2025-08-29
 # Changes in `detections_log.csv`
 
 - **Added Class Name**: The CSV header now includes a `class_name` column, which provides more context by associating each detection with its respective category.
@@ -21,7 +45,12 @@
   +CONFIDENCE_THRESHOLD = 0.54
   ```
 - **CSV Header Modification**: Updated logic for writing headers if needed:
-    ```python log_file.write("frame,class_id,class_name,confidence,x,y,w,h\u00a0\u00a09``)```		-	# Log every detection immediately (include class label) # Log every detection immediately (include class label)+                log_file.flush()# Impact of ChangesThese modifications ensure that each entry in our logs is not only accurate but also enriched with categorical labels that can assist further analysis or debugging processes._Adjusting_ the confidence level helps maintain high-quality detections by minimizing false positives.
+    ```python log_file.write("frame,class_id,class_name,confidence,x,y,w,h\u00a0\u00a09``)```		-	# Log every detection immediately (include class label) # Log every detection immediately (include class label)
++                log_file.flush()
+
+# Impact of Changes
+
+These modifications ensure that each entry in our logs is not only accurate but also enriched with categorical labels that can assist further analysis or debugging processes._Adjusting_ the confidence level helps maintain high-quality detections by minimizing false positives.
 
 ## 2025-08-29
 # Update Details
