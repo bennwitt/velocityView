@@ -2,6 +2,22 @@
 ## 2025-08-29
 # Detailed Changes
 
+## Updated .gitignore
+- **Removed**: The line `*.onnx`, which previously ignored all files with the `.onnx` extension.
+  - This change is necessary to track specific ONNX files within our repository, allowing for better version control of these machine learning models.
+  
+## Added YOLO Model File
+- **File Added**: `models/yolo11n.onnx`
+  - This is a binary file representing an Open Neural Network Exchange (ONNX) format model.
+  - The addition of this specific model suggests its importance in our project, likely related to neural network tasks such as object detection or classification using YOLO architecture.
+
+# Technical Considerations
+- **ONNX Files**: Typically used for sharing models between different frameworks. By tracking them in Git, we ensure that any updates or improvements made to these models can be documented and reverted if necessary.
+- **Binary Files in Repos**: While generally avoided due to size considerations and lack of diff support, including essential binary files like trained ML models can be critical for reproducibility and deployment consistency.
+
+## 2025-08-29
+# Detailed Changes
+
 ## New Features
 - **Clip Logging**: Introduced a new `clips_log.csv` file that logs details about each recorded clip.
   - Metadata includes:
