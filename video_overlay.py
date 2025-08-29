@@ -1,13 +1,13 @@
-# Last modified: 2025-08-29 09:51:16
-appVersion = "0.0.6"
+# Last modified: 2025-08-29 11:05:43
+appVersion = "0.1.11"
 import cv2
 import csv
 import os
 
-VIDEO_PATH = "/ai/bennwittRepos/velocityView/output/recorded_video.avi"
-OUTPUT_PATH = "/ai/bennwittRepos/velocityView/output/velocity_overlay.avi"
-FPS = 24.0
-RESOLUTION = (640, 480)
+VIDEO_PATH = "/ai/bennwittRepos/velocityView/output/recorded_video.mp4"
+OUTPUT_PATH = "/ai/bennwittRepos/velocityView/output/velocity_overlay.mp4"
+FPS_FALLBACK = 24.0
+RESOLUTION = None  # Auto from input unless overridden
 SPEED_EVENTS_FILE = "output/speed_events.csv"
 VIOLATIONS_FILE = "output/violations.csv"
 
@@ -31,8 +31,21 @@ cap = cv2.VideoCapture(VIDEO_PATH)
 if not cap.isOpened():
     raise RuntimeError("❌ Failed to open input video.")
 
-fourcc = cv2.VideoWriter_fourcc(*"XVID")
-out = cv2.VideoWriter(OUTPUT_PATH, fourcc, FPS, RESOLUTION)
+# Determine FPS and resolution dynamically
+in_w = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+in_h = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+in_fps = cap.get(cv2.CAP_PROP_FPS)
+fps = in_fps if in_fps and in_fps > 1.0 else FPS_FALLBACK
+out_size = RESOLUTION if RESOLUTION else (in_w, in_h)
+
+# MP4 writer using mp4v codec
+fourcc = cv2.VideoWriter_fourcc(*"mp4v")
+out = cv2.VideoWriter(OUTPUT_PATH, fourcc, fps, out_size)
+if not out.isOpened():
+    cap.release()
+    raise RuntimeError(
+        "❌ Failed to open MP4 writer. Your OpenCV may lack MP4 support."
+    )
 
 frame_idx = 0
 print("🎥 Annotating video with speed overlays...")
@@ -60,6 +73,9 @@ while True:
                 frame, label, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.6, color, 2
             )
 
+    # Resize if desired output size differs
+    if (frame.shape[1], frame.shape[0]) != out_size:
+        frame = cv2.resize(frame, out_size)
     out.write(frame)
     frame_idx += 1
 
