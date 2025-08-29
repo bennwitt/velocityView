@@ -1,11 +1,11 @@
-# Last modified: 2025-08-29 08:23:11
-appVersion = "0.0.5"
+# Last modified: 2025-08-29 09:51:16
+appVersion = "0.0.6"
 import cv2
 import csv
 import os
 
-VIDEO_PATH = "output/recorded_video.avi"
-OUTPUT_PATH = "output/velocity_overlay.avi"
+VIDEO_PATH = "/ai/bennwittRepos/velocityView/output/recorded_video.avi"
+OUTPUT_PATH = "/ai/bennwittRepos/velocityView/output/velocity_overlay.avi"
 FPS = 24.0
 RESOLUTION = (640, 480)
 SPEED_EVENTS_FILE = "output/speed_events.csv"
