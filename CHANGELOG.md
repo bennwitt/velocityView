@@ -2,6 +2,29 @@
 ## 2025-08-29
 # Detailed Changes
 
+## Version Update
+- **Version Increment**: Updated `appVersion` from `0.1.1` to `0.1.3`. This reflects minor improvements in code readability and functionality.
+- **Timestamp Change**: The last modified timestamp has been updated to reflect recent changes.
+
+## COCO Names List Improvements
+- Added inline comments next to each entry in the `COCO_NAMES` array:
+  - These comments denote the index of each item which improves readability and maintainability.
+  - Example:
+    ```python
+    "person",  # 0 
+    "bicycle",  # 1 
+    ````
+- This change helps developers quickly reference indices without manual counting, reducing potential errors during future modifications or debugging sessions.
+
+## Allowed Class IDs Modification
+- Refined the list of class IDs that are permissible within a residential context (`ALLOWED_CLASS_IDS`).
+- Removed some non-essential classes such as airplanes (4), buses (5), trains (6), etc., focusing on more relevant objects like vehicles, animals, and specific items:
+   ```python 
+   ALLOWED_CLASS_IDS = [0, 1, 2, ... ,39]    ```  This ensures that only pertinent classes are processed during inference tasks related to typical residential scenarios.
+
+## 2025-08-29
+# Detailed Changes
+
 ## .gitignore Update
 - Added `*.mp4` to ignore list to exclude generated video files.
 

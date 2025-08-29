@@ -1,5 +1,5 @@
-# Last modified: 2025-08-29 10:15:25
-appVersion = "0.1.1"
+# Last modified: 2025-08-29 10:41:32
+appVersion = "0.1.3"
 # velocity_infer.py - Phase 1
 import cv2
 import numpy as np
@@ -15,24 +15,25 @@ CONFIDENCE_THRESHOLD = 0.25
 NMS_THRESHOLD = 0.4
 
 # COCO class names
+
 COCO_NAMES = [
-    "person",
-    "bicycle",
-    "car",
-    "motorcycle",
+    "person",  # 0
+    "bicycle",  # 1
+    "car",  # 2
+    "motorcycle",  # 3
     "airplane",
     "bus",
     "train",
-    "truck",
-    "boat",
+    "truck",  # 7
+    "boat",  # 8
     "traffic light",
     "fire hydrant",
     "stop sign",
     "parking meter",
     "bench",
-    "bird",
-    "cat",
-    "dog",
+    "bird",  # 14
+    "cat",  # 15
+    "dog",  # 16
     "horse",
     "sheep",
     "cow",
@@ -45,21 +46,21 @@ COCO_NAMES = [
     "handbag",
     "tie",
     "suitcase",
-    "frisbee",
+    "frisbee",  # 29
     "skis",
     "snowboard",
-    "sports ball",
+    "sports ball",  # 32
     "kite",
     "baseball bat",
     "baseball glove",
-    "skateboard",
+    "skateboard",  # 36
     "surfboard",
     "tennis racket",
-    "bottle",
-    "wine glass",
+    "bottle",  # 39
+    "wine glass",  # 40
     "cup",
     "fork",
-    "knife",
+    "knife",  # 43
     "spoon",
     "bowl",
     "banana",
@@ -100,7 +101,7 @@ COCO_NAMES = [
 
 # COCO class IDs to detect in residential context
 # 0: person, ....
-ALLOWED_CLASS_IDS = [0, 1, 2, 3, 4, 5, 6, 7, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+ALLOWED_CLASS_IDS = [0, 1, 2, 3, 7, 8, 14, 15, 16, 29, 32, 36, 39, 40, 43]
 
 # Load network
 net = cv2.dnn.readNetFromONNX(MODEL_PATH)
