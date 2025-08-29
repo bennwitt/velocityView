@@ -1,5 +1,33 @@
 
 ## 2025-08-29
+# Changes Overview
+
+## New Features
+- **CSV Logging**: Introduced `detections_log.csv` to log object detections with details such as frame number, class ID, confidence score, and bounding box coordinates.
+  
+  ```csv
+  frame,class_id,class_name,confidence,x,y,w,h
+  ...
+  ```
+- **Version Update**: Incremented application version from `0.2.11` to `0.3.13`. This reflects significant changes including improved functionality in handling detection logs and recording logic.
+
+## Video Recording Logic Improvements:
+1. **Start/Stop Mechanism**:
+   - Initiates video recording upon detecting the first object of interest (`detected_this_frame`) instead of resetting on each subsequent detection.
+   - Stops writing frames after a predetermined number (`TAIL_FRAMES_AFTER_DETECTION = 300`) rather than tailing until no more objects are detected within a sliding window.
+2. **File Naming & Handling**:
+   - Generates filenames using the format: `{class_name}{timestamp}.mp4`, ensuring uniqueness even if multiple files are created within the same minute via suffix incrementation when needed.
+3. **Code Refactoring**:
+   - Replaced variable names for clarity (e.g., `frames_tail_left` renamed to `frames_left_to_record`).
+   	```python
+	# Old code snippet example:
+def handle_old_logic():
+detected_this_frame = check_detection()
+writertail_frames_left -= 1if not detected_this_frame or writertail_frames_left <= 0:writernone```
+to...	```python
+def handle_new_logic():	detected_this_framecheck_detection()if detected_this_framewriterNone:start_writer()elseframes_left_to_record-=1	```	# Benefits	This change reduces redundant I/O operations by preventing frequent stopping/starting based on fluctuating detections during active sessions.# ImpactThese enhancements streamline processing efficiency by reducing CPU load associated with constant file writes while maintaining comprehensive tracking through structured data logging.
+
+## 2025-08-29
 # Enhancements in Video Detection
 
 The recent changes bring significant improvements to the way detections are logged and videos are recorded.
