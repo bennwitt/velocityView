@@ -1,5 +1,5 @@
-# Last modified: 2025-08-29 10:48:36
-appVersion = "0.1.4"
+# Last modified: 2025-08-29 10:57:04
+appVersion = "0.2.9"
 # velocity_infer.py - Phase 1
 import cv2
 import numpy as np
@@ -11,7 +11,7 @@ MODEL_PATH = "/ai/bennwittRepos/velocityView/models/yolo11n.onnx"
 VIDEO_INPUT = 0  # Use 0 for webcam, or path to video
 OUTPUT_VIDEO_PATH = "/ai/bennwittRepos/velocityView/output/detections_annotated.mp4"
 FPS_FALLBACK = 24.0
-CONFIDENCE_THRESHOLD = 0.25
+CONFIDENCE_THRESHOLD = 0.54
 NMS_THRESHOLD = 0.4
 
 # COCO class names
@@ -124,7 +124,7 @@ log_path = "/ai/bennwittRepos/velocityView/output/detections_log.csv"
 need_header = not os.path.exists(log_path) or os.path.getsize(log_path) == 0
 log_file = open(log_path, "a", buffering=1)
 if need_header:
-    log_file.write("frame,class_id,confidence,x,y,w,h\n")
+    log_file.write("frame,class_id,class_name,confidence,x,y,w,h\n")
 
 # Prepare MP4 writer after first frame (to know frame size)
 writer = None
@@ -241,8 +241,10 @@ try:
                     color,
                     2,
                 )
-                # Log every detection immediately
-                log_file.write(f"{frame_idx},{class_id},{conf:.2f},{x},{y},{w},{h}\n")
+                # Log every detection immediately (include class label)
+                log_file.write(
+                    f"{frame_idx},{class_id},{cls_name},{conf:.2f},{x},{y},{w},{h}\n"
+                )
                 log_file.flush()
 
         # Write annotated frame
