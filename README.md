@@ -76,7 +76,7 @@ We’re putting the tools of enforcement and awareness in the hands of the peopl
 ---
 
 ## 📁 Repository Structure
-
+```
 velocityView/
 ├── models/
 │   └── yolov11n.onnx               # ONNX model for OpenCV DNN
@@ -92,12 +92,12 @@ velocityView/
 ├── violation_filter.py             # Flags over-speed events
 ├── video_overlay.py                # Annotates video with bbox + speed
 └── README.md                       # You are here
-
+```
 ---
 
 ## 🚀 Getting Started
 
-```bash
+bash
 # Set up environment
 pyenv virtualenv 3.11.11 velocityView
 pyenv activate velocityView
@@ -205,9 +205,6 @@ By putting smart enforcement in the hands of neighborhoods and developers, we:
 ---
 
 **→ Want to help? Fork, clone, contribute. Let’s make streets safer — one frame at a time.**  
-
-
-
 
 ## 🤝 Contributing
 
