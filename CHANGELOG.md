@@ -1,3 +1,39 @@
+
+## 2025-08-29
+# Detailed Changes
+
+## .gitignore Update
+- Added `*.mp4` to ignore list to exclude generated video files.
+
+## New Log Files
+- **Detections Log**: Created `output/detections_log.csv` to log frame detections with details such as class ID, confidence score, and bounding box coordinates.
+- **Recorded Video Log**: Created `output/recorded_video.csv` capturing performance metrics per frame.
+  
+## Speed Estimator Adjustments
+- Updated file paths in `speed_estimator.py`:
+  ```python
+  INPUT_CSV = '/ai/bennwittRepos/velocityView/output/detections_log.csv'
+  OUTPUT_CSV = '/ai/bennwittRepos/velocityView/output/speed_events.csv'
+  ```
+- Bumped version from `0.0.4` to `0.0.5`
+
+## Velocity Inference Enhancements
+### Configuration Updates:
+- Changed model path definitions and added a new output path for annotated videos:
+  ```python
+  MODEL_PATH = '/ai/bennwittRepos/velocityView/models/yolo11.onnx'
+  OUTPUT_VIDEO_PATH = '/ai/bennwittRepos/velocityView/output/detections_annotated.mp4'
+  FPS_FALLBACK = 24.0 # Default FPS if input fails detection \\```
+CONFIDENCE_THRESHOLD lowered from '0.4' to '0.25' for more sensitivity
+```
+NMS_THRESHOLD remains at '0.4'.
+```
+ALLOWED_CLASS_IDS defined comprehensively covering relevant COCO IDs.·YOLOv5 vs YOLOv8 handling logic refined based on dimensions of output layers (84 or >=85).·Implemented exception handling around CUDA backend setup; defaults if unavailable.
+automatically creates missing directories using os.makedirs().
+buffered writing enabled via open(log_path, "a", buffering=1)
+detection annotations directly drawn onto frames with OpenCV functions cv2.rectangle() & cv2.putText().
+numpy array operations used extensively within loops ensuring performant batch processing across detected objects per frame index iteratively incremented post-processing each loop iteration finalizes current cycle prepends next ahead anticipated continuation until KeyboardInterrupt triggers termination process closing streams releasing resources gracefully including cap.release(), writer.release(), log_file.close()
+informational messages printed post-execution indicating successful saves locations respective outputs ('detection_log', 'detections_annotated').
 # Changelog
 
 ## 2025-08-29

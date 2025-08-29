@@ -1,11 +1,11 @@
-# Last modified: 2025-08-29 08:22:37
-appVersion = "0.0.3"
+# Last modified: 2025-08-29 09:51:29
+appVersion = "0.0.4"
 import csv
 import os
 
 # Config
-INPUT_CSV = "output/speed_events.csv"
-OUTPUT_CSV = "output/violations.csv"
+INPUT_CSV = "/ai/bennwittRepos/velocityView/output/speed_events.csv"
+OUTPUT_CSV = "/ai/bennwittRepos/velocityView/output/violations.csv"
 SPEED_LIMIT_MPH = 25.0  # Set your threshold
 
 print(f"📖 Reading speed events from: {INPUT_CSV}")

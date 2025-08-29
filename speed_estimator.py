@@ -1,13 +1,13 @@
-# Last modified: 2025-08-29 08:21:50
-appVersion = "0.0.4"
+# Last modified: 2025-08-29 09:50:50
+appVersion = "0.0.5"
 
 import csv
 from collections import defaultdict
 import os
 
 # Config
-INPUT_CSV = "output/detections_log.csv"
-OUTPUT_CSV = "output/speed_events.csv"
+INPUT_CSV = "/ai/bennwittRepos/velocityView/output/detections_log.csv"
+OUTPUT_CSV = "/ai/bennwittRepos/velocityView/output/speed_events.csv"
 FPS = 24.0
 TICK_SPACING_FT = 10
 MIN_TICKS = 2  # Require at least 2 tick crossings to compute speed
