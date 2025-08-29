@@ -1,5 +1,5 @@
-# Last modified: 2025-08-29 10:41:32
-appVersion = "0.1.3"
+# Last modified: 2025-08-29 10:48:36
+appVersion = "0.1.4"
 # velocity_infer.py - Phase 1
 import cv2
 import numpy as np
@@ -63,7 +63,7 @@ COCO_NAMES = [
     "knife",  # 43
     "spoon",
     "bowl",
-    "banana",
+    "banana",  # 46
     "apple",
     "sandwich",
     "orange",

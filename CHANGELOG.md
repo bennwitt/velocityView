@@ -1,5 +1,29 @@
 
 ## 2025-08-29
+# Update Details
+
+## Detections Log Enhancements
+- **Added Entries**: Multiple new rows have been appended to `detections_log.csv`, expanding the dataset significantly.
+- **Data Structure**:
+  - Each entry consists of frame number, class ID, confidence score, and bounding box coordinates (x, y, w, h).
+  - Example of an added entry: `19,15,0.36,0,208,141,167`
+
+## Code Changes in velocity_inference.py
+- **File Metadata Update**:
+  - Updated last modified timestamp from `2025-08-29 10:41:32` to `2025-08-29 10:48:36`.
+
+```python
+timestamp = "2025-08-29T10:48:36"
+```
+
+### App Version Increment:
+The application version has been updated as follows:
+```python
+appVersion = "0.1.4" # Previously "0.1.3"
+```
+This reflects modifications made within this commit cycle.
+
+## 2025-08-29
 # Detailed Changes
 
 ## Version Update
