@@ -1,5 +1,39 @@
 
 ## 2025-08-29
+# Detailed Changes
+
+## New Features
+- **Clip Logging**: Introduced a new `clips_log.csv` file that logs details about each recorded clip.
+  - Metadata includes:
+    - Class name
+    - Filename of the saved clip
+    - Start and end timestamps in ISO format
+    - Total frames written during the session
+    - FPS reported by OpenCV vs. FPS measured based on real-time duration calculation.
+- **Timestamp Precision**: Enhanced timestamp precision in filenames from minute-level to second-level granularity for better uniqueness.
+- **Frame Accounting**: Added counters for:
+  - Frames captured during active detection sessions (`frames_captured_current_clip`)
+  - Frames actually written/saved (`frames_saved_current_clip`).
+ 
+## Code Structure Enhancements
+- Wrapped critical sections with try-finally blocks to ensure resources are properly released even if exceptions occur (e.g., releasing video writer objects).
+- Utilized Python's `datetime.now().isoformat(sep=' ')` for consistent timestamp formatting across logs.
+ 
+## Technical Implementation Details:
+```python
+def record_frame(writer, frame):
+   """
+describes how each frame is processed before being logged or saved."""
+writes(frame)
+saves_to_csv()
+increments_counter()
+stops_when_limit_reached()```
+persisted_states = [writer_path, current_clip_start_time]
+buffered_operations = [flush(), release()]```
+time_calculations = [(end_time-start_time).total_seconds(), max(1e-06)]```
+timestamp_formatting = datetime.now().strftime("%Y%m%d%H%M%S")```
+
+## 2025-08-29
 # Changes Overview
 
 ## New Features
