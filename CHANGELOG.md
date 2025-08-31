@@ -1,5 +1,30 @@
 
 ## 2025-08-31
+# Update README Image
+
+## Summary
+- **Replaced Image**: The existing `velocityviewsq.png` has been replaced by `velocityviewlowpoly.png`.
+- **New Asset**: Added `velocityviewlowpoly.png` as a new asset under the same directory.
+
+## Technical Details
+### Changes Made:
+1. **README.md Update**
+   - Changed the reference from:
+     ```markdown
+     ![VelocityView AI Overview](assets/velocityviewsq.png)
+     ```
+   - To:
+     ```markdown
+     ![VelocityView AI Overview](assets/velocityviewlowpoly.png)
+     ```
+   This updates the displayed image on GitHub's markdown renderer to use a more stylized graphic.
+2. **Asset Addition**
+   - Introduced a new binary file, `assets/velocityviewlowpoly.png`, which is now tracked in version control. This file is intended for usage within our project documentation and replaces its predecessor without altering any functional code components.
+
+## Rationale for Change:
+The decision to switch images was driven by an aesthetic update that reflects modern design sensibilities while maintaining clarity and relevance of information being conveyed through visuals.
+
+## 2025-08-31
 # Updated Image Asset: `velocityviewsq.png`
 
 ## Overview
