@@ -1,4 +1,31 @@
 
+## 2025-08-31
+# Details of Changes
+
+## Summary
+The following files have been removed:
+- **`output/clips_log.csv`**: Previously stored metadata about video clips.
+- **`output/detections_log.csv`**: Contained detection results for frames processed.
+- **`output/recorded_video.csv`**: Logged performance metrics of video recording operations.
+
+## Technical Explanation
+### Purpose of Removal
+These files were likely used for debugging or development purposes, capturing detailed logs that are no longer necessary in production. Removing them can lead to several benefits:
+- **Reduced Disk Usage**: Each file occupied space without providing ongoing value, especially in long-running systems where logs accumulate over time.
+- **Simplified File Management**: Fewer outputs mean easier navigation through directories and less clutter when accessing relevant data.
+
+### Impact on System Functionality 
+This change does not affect core functionalities if these logs were only supplementary. However, ensure that any dependent systems or scripts referencing these CSVs are updated accordingly to avoid errors due to missing files.
+
+### Code Diff Highlights 
+diff --git a/output/clips_log.csv b/output/clips_log.csv
+deleted file mode 100644...
+diff --git a/output/detections_log.csv b/output/detections_log.csv
+deleted file mode 100644...
+diff --git a/output/recorded_video.csv b/output/recorded_video.csv
+deleted file mode 100644...
+Each diff segment indicates complete removal with lines transitioning from content-filled (indicated by '-') to empty ('+') states.
+
 ## 2025-08-29
 # Detailed Changes
 
