@@ -1,5 +1,26 @@
 
 ## 2025-08-31
+# Update Overview
+
+## Changes Made:
+- **README.md**: 
+  - Introduced an image at the beginning using markdown syntax to embed visuals effectively.
+  - The image is located in `assets/velocityviewsq.png` and provides users with immediate context upon opening the README.
+- **Assets Directory**:
+  - Added a new file `velocityviewsq.png` under `assets/`. This binary addition ensures that all images are stored systematically within one directory, maintaining project organization.
+
+## Technical Details:
+- The markdown syntax used to include this image is as follows:
+  ```markdown
+  ![VelocityView AI Overview](assets/velocityviewsq.png)
+  ```
+- Markdown's image embedding allows for linking local files directly within documentation, which can be beneficial when aiming for self-contained project directories without external dependencies.
+- Binary files like images do not display diffs in text form due to their non-text nature but are crucial for enhancing user interaction through visual elements.
+
+## Considerations:
+- Ensure that any additional assets added in future commits follow this organizational pattern by residing under appropriate directories (e.g., 'assets/') ensuring neatness and accessibility across team members or open-source contributors.
+
+## 2025-08-31
 # Details of Changes
 
 ## Summary
