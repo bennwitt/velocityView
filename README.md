@@ -1,6 +1,6 @@
 # 🚦 VelocityView
 Speed Shaming Through |{A,a}✖️{I,i}|  Computer Vision
-
+![VelocityView AI Overview](assets/velocityview_illustration.png)
 > Automated AI-Powered Speed Detection & Violation Logging System  
 > Real-time vehicle tracking, speed estimation, and violation analysis using YOLOv11 + OpenCV + CUDA
 
