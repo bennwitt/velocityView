@@ -1,5 +1,29 @@
 
 ## 2025-09-01
+# Detailed Commit Information
+
+## Overview
+This commit introduces a change in the configuration of the velocity inference system by adjusting the number of frames recorded after an initial detection and updating the application version.
+
+## Changes Made
+- **Version Update**
+  - The application version was incremented from `0.3.16` to `0.3.17`. This signifies a minor update, reflecting changes that might affect behavior but do not introduce breaking changes.
+- **Tail Frame Adjustment**
+  - Modified `TAIL_FRAMES_AFTER_DETECTION`:
+    ```python
+    # Before:
+    TAIL_FRAMES_AFTER_DETECTION = 300
+    
+    # After:
+    TAIL_FRAMES_AFTER_DETECTION = 150
+    ```
+   
+### Implications of Change:
+- **Performance Impact:** Reducing this parameter will potentially decrease memory usage and processing time for video segments where detections occur frequently, as fewer frames are retained post-detection.
+- **Use Case Considerations:** Ensure that reducing tail frames aligns with expected use cases, particularly if subsequent frame analysis is critical post-initial detection.
+- **Testing Requirements:** Validate that this change does not adversely impact downstream processes or analytics relying on extended frame data following an object detection event.
+
+## 2025-09-01
 # Image Update in README
 
 ## Overview
