@@ -1,5 +1,5 @@
-# Last modified: 2025-08-29 17:33:18
-appVersion = "0.3.16"
+# Last modified: 2025-09-01 16:09:12
+appVersion = "0.3.17"
 # velocity_infer.py - Phase 1
 import cv2
 import numpy as np
@@ -17,7 +17,7 @@ NMS_THRESHOLD = 0.4
 # Number of frames to record starting from the FIRST detection.
 # Recording will stop exactly after this many frames, regardless of
 # additional detections that may follow while recording is active.
-TAIL_FRAMES_AFTER_DETECTION = 300
+TAIL_FRAMES_AFTER_DETECTION = 150
 
 # COCO class names
 
