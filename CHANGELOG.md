@@ -1,4 +1,25 @@
 
+## 2025-09-01
+# Image Update in README
+
+## Overview
+This commit updates the main visual representation of VelocityView AI within the `README.md` by replacing:
+- **Old Image**: `assets/velocityviewlowpoly.png`
+- **New Image**: `assets/velocityviewlowpoly2.png`
+
+## Changes Made
+- **README.md**: Changed markdown image link.
+  ```diff
+  -![VelocityView AI Overview](assets/velocityviewlowpoly.png)
+  +![VelocityView AI Overview](assets/velocityviewlowpoly2.png)
+  ```
+- **Binary File Updates**:
+  - The previous image file, located at `assets/velocityviewlowpoly.png`, has been replaced as indicated by differing binary files.
+  - Introduced a new binary file named `assets/velocityviewlowpoly2.png`, which serves as the latest graphical asset for our project documentation.
+
+## Rationale Behind Change
+Updating visuals is crucial for maintaining up-to-date and accurate representations of our project's capabilities. This change ensures that users are greeted with an improved and possibly more informative graphic when accessing our repository's main page.
+
 ## 2025-08-31
 # Update README Image
 

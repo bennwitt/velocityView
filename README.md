@@ -1,4 +1,4 @@
-![VelocityView AI Overview](assets/velocityviewlowpoly.png)
+![VelocityView AI Overview](assets/velocityviewlowpoly2.png)
 
 # 🚦 VelocityView
 Speed Shaming Through |{A,a}✖️{I,i}|  Computer Vision
