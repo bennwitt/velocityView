@@ -1,5 +1,5 @@
-# Last modified: 2025-09-01 16:09:12
-appVersion = "0.3.17"
+# Last modified: 2025-09-02 13:32:52
+appVersion = "0.3.25"
 # velocity_infer.py - Phase 1
 import cv2
 import numpy as np
@@ -12,13 +12,12 @@ MODEL_PATH = "/ai/bennwittRepos/velocityView/models/yolo11n.onnx"
 VIDEO_INPUT = 0  # Use 0 for webcam, or path to video
 OUTPUT_VIDEO_PATH = "/ai/bennwittRepos/velocityView/output/detections_annotated.mp4"  # legacy single-file path (unused for rolling clips)
 FPS_FALLBACK = 24.0
-CONFIDENCE_THRESHOLD = 0.54
+CONFIDENCE_THRESHOLD = 0.71
 NMS_THRESHOLD = 0.4
 # Number of frames to record starting from the FIRST detection.
 # Recording will stop exactly after this many frames, regardless of
 # additional detections that may follow while recording is active.
-TAIL_FRAMES_AFTER_DETECTION = 150
-
+TAIL_FRAMES_AFTER_DETECTION = 150  # ~5 second clips
 # COCO class names
 
 COCO_NAMES = [
@@ -26,87 +25,24 @@ COCO_NAMES = [
     "bicycle",  # 1
     "car",  # 2
     "motorcycle",  # 3
-    "airplane",
-    "bus",
-    "train",
-    "truck",  # 7
-    "boat",  # 8
-    "traffic light",
-    "fire hydrant",
-    "stop sign",
-    "parking meter",
-    "bench",
-    "bird",  # 14
-    "cat",  # 15
-    "dog",  # 16
-    "horse",
-    "sheep",
-    "cow",
-    "elephant",
-    "bear",
-    "zebra",
-    "giraffe",
-    "backpack",
-    "umbrella",
-    "handbag",
-    "tie",
-    "suitcase",
-    "frisbee",  # 29
-    "skis",
-    "snowboard",
-    "sports ball",  # 32
-    "kite",
-    "baseball bat",
-    "baseball glove",
-    "skateboard",  # 36
-    "surfboard",
-    "tennis racket",
-    "bottle",  # 39
-    "wine glass",  # 40
-    "cup",
-    "fork",
-    "knife",  # 43
-    "spoon",
-    "bowl",
-    "banana",  # 46
-    "apple",
-    "sandwich",
-    "orange",
-    "broccoli",
-    "carrot",
-    "hot dog",
-    "pizza",
-    "donut",
-    "cake",
-    "chair",
-    "couch",
-    "potted plant",
-    "bed",
-    "dining table",
-    "toilet",
-    "tv",
-    "laptop",
-    "mouse",
-    "remote",
-    "keyboard",
-    "cell phone",
-    "microwave",
-    "oven",
-    "toaster",
-    "sink",
-    "refrigerator",
-    "book",
-    "clock",
-    "vase",
-    "scissors",
-    "teddy bear",
-    "hair drier",
-    "toothbrush",
+    "bus",  # 4
+    "truck",  # 5
+    "boat",  # 6
+    "cat",  # 7
+    "dog",  # 8
+    "cow",  # 9
+    "frisbee",  # 10
+    "sports ball",  # 11
+    "skateboard",  # 12
+    "surfboard",  # 13
+    "wine glass",  # 14
+    "knife",  # 15
+    "scissors",  # 16
 ]
 
 # COCO class IDs to detect in residential context
 # 0: person, ....
-ALLOWED_CLASS_IDS = [0, 1, 2, 3, 7, 8, 14, 15, 16, 29, 32, 36, 39, 40, 43]
+ALLOWED_CLASS_IDS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
 
 # Load network
 net = cv2.dnn.readNetFromONNX(MODEL_PATH)

@@ -1,4 +1,40 @@
 
+## 2025-09-02
+# Changes Overview
+
+## Version Update
+- **Updated `appVersion`**: Changed from `0.3.17` to `0.3.25`, reflecting significant updates in model parameters.
+- **Modification Timestamp**: Updated last modified date to reflect changes.
+
+## Parameter Adjustments
+- **Confidence Threshold**:
+  - Increased from `0.54` to `0.71`. This adjustment aims to reduce false positives by requiring higher confidence levels before detections are considered valid.
+  
+```python
+CONFIDENCE_THRESHOLD = 0.71
+```
+- **Tail Frames After Detection**:
+  - Added comment clarification, noting that this parameter creates clips of approximately ~5 seconds duration post-detection.
+  
+```python
+TAIL_FRAMES_AFTER_DETECTION = 150 # ~5 second clips
+```
+
+## COCO Class Names Optimization:
+- Trimmed the list of detectable objects down significantly, focusing only on those most likely encountered in a residential environment or required by the application logic.
+- Removed redundant and unlikely classes such as "airplane", "bench", etc., which are less relevant in typical use cases of this project.
+ ```python 
+person, bicycle, car, motorcycle,
+bus, truck, boat,
+dog,...
+surfboard... scissors...
+note: Indices updated accordingly...
+also reflected in ALLOWED_CLASS_IDS array update...
+and comments adjusted for clarity...
+to ensure accurate mapping between indices and class names...
+and enhance code maintainability and readability... ```
+in summary these changes aim at improving detection performance while maintaining efficient processing...
+
 ## 2025-09-01
 # Detailed Commit Information
 
