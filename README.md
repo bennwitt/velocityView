@@ -75,6 +75,7 @@ We’re putting the tools of enforcement and awareness in the hands of the peopl
 - ✅ Headless operation (no GUI required)
 - ✅ Overlay export of annotated speed data
 - ✅ Modular codebase: detection, logging, estimation, filtering, visualization
+- ✅ Vision–language vehicle descriptions with Apple's FastVLM
 
 ---
 
@@ -82,7 +83,9 @@ We’re putting the tools of enforcement and awareness in the hands of the peopl
 ```
 velocityView/
 ├── models/
-│   └── yolov11n.onnx               # ONNX model for OpenCV DNN
+│   └── yolo11n.onnx                # ONNX model for OpenCV DNN
+│   └── FastVLM-1.5B/               # (optional) Local FastVLM snapshot
+│   └── FastVLM-7B/                 # (optional) Local FastVLM snapshot
 ├── output/
 │   └── recorded_video.avi          # Raw captured video
 │   └── detections_log.csv          # Tick-crossing logs
@@ -90,10 +93,12 @@ velocityView/
 │   └── violations.csv              # Speeds over limit
 │   └── velocity_overlay.avi        # Annotated output video
 ├── record_webcam.py                # Headless video recorder
-├── velocity_infer.py               # YOLOv11-based detection + tick crossing
+├── velocity_inference.py           # YOLOv11-based detection + tick crossing
 ├── speed_estimator.py              # Calculates speeds from tick logs
 ├── violation_filter.py             # Flags over-speed events
 ├── video_overlay.py                # Annotates video with bbox + speed
+├── describe_inference.py           # FastVLM-based scene/incident descriptions
+├── download_fastvlm.py             # Helper to fetch FastVLM locally
 └── README.md                       # You are here
 ```
 ---
@@ -111,12 +116,64 @@ yolo export model=yolov11n.pt format=onnx
 
 # Run detection pipeline
 python record_webcam.py
-python velocity_infer.py
+python velocity_inference.py
 python speed_estimator.py
 python violation_filter.py
 python video_overlay.py
 ````
 ---
+
+## 📝 Vehicle Descriptions (FastVLM)
+
+`describe_inference.py` adds a multimodal description step powered by Apple's FastVLM vision–language model. Given an image (for example, a cropped frame of a detected vehicle) it produces a structured, detailed description that answers the classic who/what/when/where/why/how, along with a rich summary of the scene.
+
+- What it does: Generates a strict JSON description inside a `json` code block. Keys include: `who`, `gender`, `age`, `ethnicity`, `what`, `when`, `where`, `why`, `how`, `detailed_summary`, `additional`, `confidence`, and `object_list` (with per-object names/descriptions and relative coordinates).
+- How it helps: Pairs quantitative speed detection with qualitative context (e.g., “red pickup overtaking on the right near school crosswalk at dusk”).
+- Speed awareness: Your pipeline can attach the measured speed to the same record; the JSON’s `additional` field is a good place to include speed, timestamp, and location metadata.
+
+### Run the describer UI
+```
+python describe_inference.py
+```
+- Opens a Gradio UI on `http://0.0.0.0:7860` for interactive testing.
+- Upload any frame or crop; copy the returned JSON for downstream use.
+
+### Model setup (FastVLM)
+- Requirements: `torch`, `transformers`, `gradio`, `huggingface-hub` (see `requirements.txt`).
+- Variants: Script defaults to `apple/FastVLM-7B`. For lighter hardware, use `FastVLM-1.5B`.
+- Offline/local loading options:
+  - Auto-download from Hugging Face when first run (requires network).
+  - Or pre-download locally:
+    ```
+    python download_fastvlm.py   # downloads apple/FastVLM-1.5B to models/FastVLM-1.5B
+    ```
+    Then edit `MID` and `MODEL_LOCAL_DIR` at the top of `describe_inference.py` to use the `FastVLM-1.5B` directory.
+
+### Pipeline integration
+- Capture: When a violation or noteworthy event is found, save a frame and optionally a tight crop of the vehicle.
+- Describe: Feed the crop to `describe_inference.py` (batch or service mode) and merge the returned JSON with your speed/time/place metadata.
+- Store: Persist a single incident record combining: image path, measured speed, the FastVLM JSON, and links to your overlay video and CSV logs.
+
+### Output shape (example keys)
+The model returns a `json` code block containing keys like:
+```
+{
+  "who": "Unknown",
+  "what": "Red pickup truck traveling eastbound",
+  "when": "Dusk/low light",
+  "where": "Two-lane residential road near crosswalk",
+  "why": "Appears to be overtaking slower vehicle",
+  "how": "Moving at steady pace; right-side overtake",
+  "additional": "Measured speed: 38 mph; Limit: 25 mph",
+  "object_list": [ { "name": "truck", "x": 0.62, "y": 0.48, "description": "red pickup" } ],
+  "confidence": 78
+}
+```
+
+Notes:
+- Sensitive attributes (gender/age/ethnicity) are optional and should be treated as uncertain; the prompt defaults these to "Unknown" when unclear.
+- Use responsibly and comply with local laws and privacy guidance.
+
 
 ## 🧭 Next-Level Roadmap: Where VelocityView Goes from Here
 
