@@ -7,6 +7,7 @@ __pycache__/
 *.so
 *.pt
 *.mp4
+models/FastVLM*
 # Distribution / packaging
 .Python
 build/

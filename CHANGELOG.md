@@ -1,5 +1,37 @@
 
 ## 2025-09-03
+# Summary of Changes
+
+## .gitignore Updates
+- **Added**: `models/FastVLM*` to ignore any files related to models in this directory.
+
+## describe_inference.py Modifications
+### Metadata & Versioning:
+- **Updated** modification timestamp.
+- **Incremented** `appVersion` from `0.0.1` to `0.0.7`, indicating significant changes including feature enhancement and bug fixes.
+
+### Model Configuration:
+- **Model ID Change**: Updated from "apple/FastVLM-1.5B" to "apple/FastVLM-7B" reflecting an upgrade in the underlying language model used for inference.
+
+### New Functionality:
+#### `_resolve_local_model_dir`
+  - A new utility function designed to locate directories containing a configuration file (`config.json`).
+  - This supports flexible local path resolutions accommodating various directory structures typical in Hugging Face snapshots.
+  \\```python
+def _resolve_local_model_dir(base_dir: str) -> str | None:
+```
+and so forth...
+
+#### Image Description Logic Enhancements:
+  - Transitioned from simple text prompts to structured JSON outputs using Gradio's interface capabilities.
+  - The response now strictly adheres to a predefined schema enclosed within code blocks ensuring consistency and ease of parsing by downstream applications or services.
+n\\```json{"who": "Unknown", ...}
+n\\```
+instructions provided ensure that each field is addressed correctly even when data is uncertain (e.g., use of 'Unknown' for sensitive attributes).
+n\# Inference Generation Adjustments:\\
+nMax token length considerations were added ensuring compatibility across various contexts sizes with dynamic calculations based on existing sequence lengths.nnThe decoding process was refined allowing more robust handling of sequences avoiding truncation issues.nnFinally set server_name parameter during app launch enabling broader accessibility options via network interfaces.n
+
+## 2025-09-03
 # Changes Overview
 
 ## Description
@@ -32,7 +64,14 @@ u0028/u2026); \newline; # Model Instantiation\newline; );model = AutoModelForCau
 torched_dtype=dtype,
 d_device_map="auto",
 t_trust_remote_co…;
-d_cache_dir=MODEL_LOC... [end code]) ### New Script: download_fastvlm.py:#### PurposeProvides functionality to download and store specific versions or snapshots of machine learning models locally via Hugging Face Hub API integration.#### Functionality Overview* Implements main function executing snapshot downloads utilizing 'huggingface-hub' library functions while ensuring target directories exist prior execution through use built-in 'os' package capabilities like makedirs().** Allows ignoring non-essential files during downloads optimizing space usage when specified within ignore_patterns argument parameter.*
+d_cache_dir=MODEL_LOC... [end code]) ### New Script: download_fastvlm.py:
+
+#### Purpose
+Provides functionality to download and store specific versions or snapshots of machine learning models locally via Hugging Face Hub API integration.
+
+#### Functionality Overview
+* Implements main function executing snapshot downloads utilizing 'huggingface-hub' library functions while ensuring target directories exist prior execution through use built-in 'os' package capabilities like makedirs().*
+* Allows ignoring non-essential files during downloads optimizing space usage when specified within ignore_patterns argument parameter.*
 
 ## 2025-09-03
 # New Features
