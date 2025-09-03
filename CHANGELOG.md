@@ -1,5 +1,31 @@
 
 ## 2025-09-03
+# Overview
+This commit introduces significant enhancements to the VelocityView project by integrating Apple's FastVLM model, which provides vision-language capabilities. This allows for detailed vehicle descriptions alongside existing speed detection.
+
+## Key Changes
+- **Vision-Language Integration**: Added support for generating structured descriptions of detected vehicles using the `describe_inference.py` script.
+  - Utilizes Apple's FastVLM model to produce JSON-formatted outputs detailing aspects such as 'who', 'what', 'when', and more.
+- **Script Updates**:
+  - Renamed `velocity_infer.py` to `velocity_inference.py` for consistency with function naming conventions.
+  - Introduced new scripts: 
+    - `describe_inference.py`: Handles inference requests using the FastVLM model.
+    - `download_fastvlm.py`: Facilitates downloading of required model files locally from Hugging Face Hub.
+- **Directory Structure**:
+  - Added directories under `models/` for storing local snapshots of different versions of the FastVLM model (`FastVLM-1.5B`, `FastVLM-7B`).
+
+## Detailed Usage Instructions
+### Vehicle Description Generation with FastVLM
+The integration empowers users with a multimodal description step powered by Apple’s vision-language technology, enhancing context awareness in traffic monitoring systems:
+```python
+git clone <repo-url>
+pip install -r requirements.txt # Ensure dependencies are installed properly
+python describe_inference.py   # Launches Gradio UI at http://0.0.0.0:7860/
+upload_frame_or_crop()         # Test image uploads; copies resulting JSON output
+download_fastvlm_model()       # Downloads models if not already present locally
+```						        	      	     	            	                    	           ## Model Setup & Variants   * Default is set to use larger capacity variant (Fast VMLM –7 B). For limited resource environments switch configuration parameters found at top lines within ‘describe inference py’ file.* Local download option ensures robustness against connectivity issues when setting up pipeline first time around or in isolated environments without internet accessibility.# Output Format Example* The generated JSON includes keys like:`{“who”: “Unknown”, “what”: “Red pickup truck traveling eastbound”,…}`# Important ConsiderationsSensitive attributes should be handled cautiously respecting privacy guidelines & regulations applicable jurisdictionally.
+
+## 2025-09-03
 # Summary of Changes
 
 ## .gitignore Updates
