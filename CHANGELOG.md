@@ -1,5 +1,29 @@
 
 ## 2025-09-03
+# Refactor Details
+
+## Changes Made:
+- **Descriptions Column**: Removed specific mention of `describe_inference.py` and `(Gradio UI)` from the table.
+  
+  Before:
+  ```markdown
+  | Descriptions | Apple's FastVLM (1.5B/7B) via `transformers`; structured who/what/when/where/why/how JSON from `describe_inference.py` (Gradio UI) |
+  ```
+  
+  After:
+  ```markdown
+  | Descriptions | Apple's FastVLM (1.5B/7B) via `transformers`; structured who/what/when/where/why/how |
+  ```
+
+## Rationale:
+- **Simplification**: The removed text (`describe_inference.py` and `(Gradio UI)`) was deemed unnecessary for this high-level overview, as it pertains more to implementation specifics rather than conceptual understanding.
+- **Readability Improvement**: By focusing on what is fundamentally provided—structured descriptions—the content becomes easier to digest at a glance without diving into technical specifics prematurely.
+
+## Impact:
+- This edit does not affect any underlying functionality or code execution; it purely enhances documentation clarity.
+- Developers referencing this document will have a clearer initial impression without being overwhelmed by auxiliary details right away.
+
+## 2025-09-03
 # Update README.md
 
 ## Summary of Changes
