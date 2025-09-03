@@ -1,5 +1,40 @@
 
 ## 2025-09-03
+# Changes Overview
+
+## Description
+This commit introduces enhancements to the `describe_inference.py` script by integrating a mechanism to utilize locally cached models, specifically targeting the FastVLM-1.5B model. Additionally, a new utility script, `download_fastvlm.py`, is provided to facilitate the downloading of this model into a designated directory.
+
+## Key Modifications
+### describe_inference.py:
+- **Import Statement**: Added an import statement for `os` module which is necessary for handling file paths.
+  ```python
+  import os
+  ```
+- **Constants Definition**: Introduced `MODEL_LOCAL_DIR` constant that defines the path where local models are stored.
+  ```python
+  MODEL_LOCAL_DIR = os.path.join("models", "FastVLM-1.5B")
+  ```
+- **Model Loading Logic**:
+  - Updated logic in `load_model()` function to check if a local copy of the model exists before attempting to download from Hugging Face's repository.
+  - Set up conditional paths (`source_path`) based on directory availability with preference given to existing local copies.
+  - Modified calls for both tokenizer and model instantiation with parameters such as `cache_dir` and `local_files_only` set appropriately based on source location (local vs remote).
+   \\[Example Code]: \\​​​…색이사이드; \\[end]\\[start](code)
+u0028code)tokenizer = AutoTokenizer.from_pretrained(
+sourc…;
+u0028/u2026); \newline; ; ; ; ,trust_remote_code=True,
+cach…;
+n_source_path == MID else None,
+l_local_files_onl…;
+m_source_path == MODEL_LOCAL_DIR,
+a);
+u0028/u2026); \newline; # Model Instantiation\newline; );model = AutoModelForCausalL…;
+torched_dtype=dtype,
+d_device_map="auto",
+t_trust_remote_co…;
+d_cache_dir=MODEL_LOC... [end code]) ### New Script: download_fastvlm.py:#### PurposeProvides functionality to download and store specific versions or snapshots of machine learning models locally via Hugging Face Hub API integration.#### Functionality Overview* Implements main function executing snapshot downloads utilizing 'huggingface-hub' library functions while ensuring target directories exist prior execution through use built-in 'os' package capabilities like makedirs().** Allows ignoring non-essential files during downloads optimizing space usage when specified within ignore_patterns argument parameter.*
+
+## 2025-09-03
 # New Features
 
 ## Gradio Interface Implementation

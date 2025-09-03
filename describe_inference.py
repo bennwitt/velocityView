@@ -17,6 +17,7 @@ Usage:
 Launches a local Gradio server at http://localhost:7860/ by default.
 """
 
+import os
 import torch
 from PIL import Image
 from transformers import AutoTokenizer, AutoModelForCausalLM
@@ -26,6 +27,7 @@ import gradio as gr
 # inserted into the text sequence to indicate where the vision features
 # belong.  It must match the value expected by the underlying model code.
 MID = "apple/FastVLM-1.5B"
+MODEL_LOCAL_DIR = os.path.join("models", "FastVLM-1.5B")
 IMAGE_TOKEN_INDEX = -200
 
 
@@ -37,12 +39,22 @@ def load_model():
     # Determine the appropriate dtype based on hardware availability.  Use
     # float16 on GPU for efficiency; fall back to float32 on CPU.
     dtype = torch.float16 if torch.cuda.is_available() else torch.float32
-    tokenizer = AutoTokenizer.from_pretrained(MID, trust_remote_code=True)
+    # Prefer a local copy in models/FastVLM-1.5B if available. Otherwise
+    # load from Hugging Face, caching into the local models directory.
+    source_path = MODEL_LOCAL_DIR if os.path.isdir(MODEL_LOCAL_DIR) else MID
+    tokenizer = AutoTokenizer.from_pretrained(
+        source_path,
+        trust_remote_code=True,
+        cache_dir=MODEL_LOCAL_DIR if source_path == MID else None,
+        local_files_only=source_path == MODEL_LOCAL_DIR,
+    )
     model = AutoModelForCausalLM.from_pretrained(
-        MID,
+        source_path,
         torch_dtype=dtype,
         device_map="auto",
         trust_remote_code=True,
+        cache_dir=MODEL_LOCAL_DIR if source_path == MID else None,
+        local_files_only=source_path == MODEL_LOCAL_DIR,
     )
     return tokenizer, model
 
