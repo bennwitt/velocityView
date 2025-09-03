@@ -1,5 +1,31 @@
 
 ## 2025-09-03
+# Update README.md
+
+## Summary of Changes
+- Added an entry under the features table in `README.md`:
+  - **Descriptions**: Utilizes Apple's FastVLM models (1.5B/7B parameters) via the `transformers` library.
+  - Generates structured JSON output detailing violation circumstances (who/what/when/where/why/how).
+  - Offers integration with a Gradio UI for ease of use.
+
+## Technical Details
+- **FastVLM**: A model architecture developed by Apple designed for efficient language modeling tasks. Here it's employed to generate descriptive text based on video analysis inputs.
+- **Transformers Library**: Used to leverage pretrained models such as FastVLM; ensures high performance inference capabilities.
+- **Structured JSON Output**:
+  - The generated descriptions are formatted in JSON structure providing clarity and machine-readability.
+  ```json
+  {
+      "who": "",
+      "what": "",
+      "when": "",
+      "where": "",
+      "why": "",
+      "how": ""
+  }
+  ```
+- **Gradio UI Integration**: Facilitates user interaction allowing non-developers to access complex functionalities without needing direct code manipulation or understanding of backend processes.
+
+## 2025-09-03
 # Overview
 This commit introduces significant enhancements to the VelocityView project by integrating Apple's FastVLM model, which provides vision-language capabilities. This allows for detailed vehicle descriptions alongside existing speed detection.
 
