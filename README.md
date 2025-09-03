@@ -64,6 +64,7 @@ We’re putting the tools of enforcement and awareness in the hands of the peopl
 | Violation Filter | CSV-based logic over thresholds |
 | Overlay | Annotated bounding boxes + speeds (green/legal, red/violator) |
 | Video I/O | OpenCV (headless or recorded) |
+| Descriptions | Apple's FastVLM (1.5B/7B) via `transformers`; structured who/what/when/where/why/how |
 
 ---
 

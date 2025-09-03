@@ -1,5 +1,55 @@
 
 ## 2025-09-03
+# Refactor Details
+
+## Changes Made:
+- **Descriptions Column**: Removed specific mention of `describe_inference.py` and `(Gradio UI)` from the table.
+  
+  Before:
+  ```markdown
+  | Descriptions | Apple's FastVLM (1.5B/7B) via `transformers`; structured who/what/when/where/why/how JSON from `describe_inference.py` (Gradio UI) |
+  ```
+  
+  After:
+  ```markdown
+  | Descriptions | Apple's FastVLM (1.5B/7B) via `transformers`; structured who/what/when/where/why/how |
+  ```
+
+## Rationale:
+- **Simplification**: The removed text (`describe_inference.py` and `(Gradio UI)`) was deemed unnecessary for this high-level overview, as it pertains more to implementation specifics rather than conceptual understanding.
+- **Readability Improvement**: By focusing on what is fundamentally provided—structured descriptions—the content becomes easier to digest at a glance without diving into technical specifics prematurely.
+
+## Impact:
+- This edit does not affect any underlying functionality or code execution; it purely enhances documentation clarity.
+- Developers referencing this document will have a clearer initial impression without being overwhelmed by auxiliary details right away.
+
+## 2025-09-03
+# Update README.md
+
+## Summary of Changes
+- Added an entry under the features table in `README.md`:
+  - **Descriptions**: Utilizes Apple's FastVLM models (1.5B/7B parameters) via the `transformers` library.
+  - Generates structured JSON output detailing violation circumstances (who/what/when/where/why/how).
+  - Offers integration with a Gradio UI for ease of use.
+
+## Technical Details
+- **FastVLM**: A model architecture developed by Apple designed for efficient language modeling tasks. Here it's employed to generate descriptive text based on video analysis inputs.
+- **Transformers Library**: Used to leverage pretrained models such as FastVLM; ensures high performance inference capabilities.
+- **Structured JSON Output**:
+  - The generated descriptions are formatted in JSON structure providing clarity and machine-readability.
+  ```json
+  {
+      "who": "",
+      "what": "",
+      "when": "",
+      "where": "",
+      "why": "",
+      "how": ""
+  }
+  ```
+- **Gradio UI Integration**: Facilitates user interaction allowing non-developers to access complex functionalities without needing direct code manipulation or understanding of backend processes.
+
+## 2025-09-03
 # Overview
 This commit introduces significant enhancements to the VelocityView project by integrating Apple's FastVLM model, which provides vision-language capabilities. This allows for detailed vehicle descriptions alongside existing speed detection.
 
